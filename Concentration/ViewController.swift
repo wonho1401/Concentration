@@ -8,14 +8,14 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    lazy var game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+    // lazy는 초기화 됐다고 간주한다. -> lazy 사용 시 didSet 선언 불가.
     var flipCount: Int = 0 {
         didSet{
             flipCountLabel.text = "Flips: \(flipCount)"
         }
     }
-    
-    var emojiChoices = ["🎃","👻","🎃","👻"]
     
     @IBOutlet weak var flipCountLabel: UILabel!
     
@@ -24,22 +24,39 @@ class ViewController: UIViewController {
     @IBAction func touchCard(_ sender: UIButton) {
         flipCount += 1
         if let cardNumber = cardButtons.firstIndex(of: sender){
-            flipCard(withEmoji: emojiChoices[cardNumber], on: sender)
+            game.chooseCard(at: cardNumber)
+            updateViewFromModel()
         } else{
             print("Chosen card was not in cardButtons.")
         }
         
     }
     
-    func flipCard(withEmoji emoji: String, on button: UIButton){
-        if button.currentTitle == emoji{
-            button.setTitle("", for: .normal)
-            button.backgroundColor = .orange
-        } else{
-            button.setTitle(emoji, for: .normal)
-            button.backgroundColor = .white
+    func updateViewFromModel(){
+        for index in cardButtons.indices {
+            let button = cardButtons[index]
+            let card = game.cards[index]
+            
+            if card.isFaceUp{
+                button.setTitle(emoji(for: card), for: .normal)
+                button.backgroundColor = .white
+            } else{
+                button.setTitle("", for: .normal)
+                button.backgroundColor = card.isMatched ? .clear : .orange
+            }
         }
     }
-
+    
+    var emojiChoices = ["☠️","🦇","🎃","👻","🥶","🍭","💀","🍬","😇"]
+    
+    var emoji = [Int:String]()
+    
+    func emoji(for card: Card) -> String {
+        if emoji[card.identifier] == nil, emojiChoices.count > 0{
+                let randomIndex = Int(arc4random_uniform(UInt32(emojiChoices.count)))
+                emoji[card.identifier] = emojiChoices.remove(at: randomIndex)
+        }
+        return emoji[card.identifier] ?? "?"
+    }
 }
 
