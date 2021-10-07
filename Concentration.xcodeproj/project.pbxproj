@@ -63,8 +63,8 @@
 				4988EEAF27042C230083CAB3 /* Supporting */,
 				4988EE9D27042B290083CAB3 /* SceneDelegate.swift */,
 				4988EE9F27042B290083CAB3 /* ViewController.swift */,
-				497F8D2B270C0AC1007AAA44 /* Concentration.swift */,
 				497F8D2D270C0B9B007AAA44 /* Card.swift */,
+				497F8D2B270C0AC1007AAA44 /* Concentration.swift */,
 				4988EEA127042B290083CAB3 /* Main.storyboard */,
 				4988EEA927042B2D0083CAB3 /* Info.plist */,
 			);
