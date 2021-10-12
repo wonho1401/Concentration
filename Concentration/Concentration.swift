@@ -9,7 +9,12 @@ import Foundation
 
 //Model
 
-class Concentration{
+//protocol은 API에서 원하는 것을 불러오는 방식 => 그걸 받는 메소드는 무엇을 원하는 지 나타낼 수 있음
+// => protocol이 변수와 함수의 리스트이기 때문에 가능
+// protocol은 API를 더 유연하고 이해하기 쉽게 만들어 주는 역할
+// protocol도 그저 하나의 타입.
+
+struct Concentration{
     private(set) var cards = [Card]()
     
     private var indexOfOneAndOnlyFaceUpCard: Int? {
@@ -34,11 +39,11 @@ class Concentration{
         }
     }
     
-    func chooseCard(at index: Int){
+    mutating func chooseCard(at index: Int){
         assert(cards.indices.contains(index), "Concentration.chooseCard(at:\(index)): Chosen card is not in the cards.")
         if !cards[index].isMatched{
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
-                if cards[matchIndex].identifier == cards[index].identifier{
+                if cards[matchIndex] == cards[index]{
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
                 }
