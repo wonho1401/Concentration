@@ -17,12 +17,25 @@ class ViewController: UIViewController {
     // lazy는 초기화 됐다고 간주한다. -> lazy 사용 시 didSet 선언 불가.
     private(set) var flipCount: Int = 0 {
         didSet{
-            flipCountLabel.text = "Flips: \(flipCount)"
+           updateFlipCountLabel()
         }
     }
     
+    private func updateFlipCountLabel(){
+        let attributes: [NSAttributedString.Key: Any] = [
+            .strokeWidth: 5.0,
+            .strokeColor: UIColor.systemOrange
+        ]
+        let attributedString = NSAttributedString(string: "Flips: \(flipCount)", attributes: attributes)
+        flipCountLabel.attributedText = attributedString
+    }
+    
     //IBOutlet, IBAction은 웬만하면 private으로 설정. -> 뷰 컨트롤러가 UI를 제어하는 방식
-    @IBOutlet private weak var flipCountLabel: UILabel!
+    @IBOutlet private weak var flipCountLabel: UILabel! {
+        didSet{
+            updateFlipCountLabel()
+        }
+    }
     
     @IBOutlet private var cardButtons: [UIButton]!
     
@@ -44,10 +57,10 @@ class ViewController: UIViewController {
             
             if card.isFaceUp{
                 button.setTitle(emoji(for: card), for: .normal)
-                button.backgroundColor = .white
+                button.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
             } else{
                 button.setTitle("", for: .normal)
-                button.backgroundColor = card.isMatched ? .clear : .orange
+                button.backgroundColor = card.isMatched ? UIColor(red: 0, green: 0, blue: 0, alpha: 0) : UIColor.systemOrange
             }
         }
     }
