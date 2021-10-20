@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct Card: Hashable{
+struct Card{
     
     var isFaceUp = false
     var isMatched = false
-    private var identifier: Int
+    var identifier: Int
     
     private static var identifierFactory = 0
     
