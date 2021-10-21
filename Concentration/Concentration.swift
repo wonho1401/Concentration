@@ -14,7 +14,7 @@ import Foundation
 // protocol은 API를 더 유연하고 이해하기 쉽게 만들어 주는 역할
 // protocol도 그저 하나의 타입.
 
-class Concentration{
+struct Concentration{
     private(set) var cards = [Card]()
     
     private var indexOfOneAndOnlyFaceUpCard: Int? {
@@ -29,7 +29,7 @@ class Concentration{
         }
     }
     
-    func chooseCard(at index: Int){
+    mutating func chooseCard(at index: Int){
         assert(cards.indices.contains(index), "Concentration.chooseCard(at:\(index)): Chosen card is not in the cards.")
         if !cards[index].isMatched{
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
