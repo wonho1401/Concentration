@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ConcentrationViewController: UIViewController {
     
     private lazy var game = Concentration(numberOfPairsOfCards: numberOfPairsOfCards)
     
@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     private func updateFlipCountLabel(){
         let attributes: [NSAttributedString.Key: Any] = [
             .strokeWidth: 5.0,
-            .strokeColor: UIColor.systemOrange
+            .strokeColor: UIColor.black
         ]
         let attributedString = NSAttributedString(string: "Flips: \(flipCount)", attributes: attributes)
         flipCountLabel.attributedText = attributedString
@@ -51,29 +51,41 @@ class ViewController: UIViewController {
     }
     
     private func updateViewFromModel(){
-        for index in cardButtons.indices {
-            let button = cardButtons[index]
-            let card = game.cards[index]
-            
-            if card.isFaceUp{
-                button.setTitle(emoji(for: card), for: .normal)
-                button.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-            } else{
-                button.setTitle("", for: .normal)
-                button.backgroundColor = card.isMatched ? UIColor(red: 0, green: 0, blue: 0, alpha: 0) : UIColor.systemOrange
+        // MVC가 준비되는 동안에 호출되지 않도록 nil인지 아닌지 확인하는 과정이 필요함.
+        if cardButtons != nil{
+            for index in cardButtons.indices {
+                let button = cardButtons[index]
+                let card = game.cards[index]
+                
+                if card.isFaceUp{
+                    button.setTitle(emoji(for: card), for: .normal)
+                    button.backgroundColor = UIColor.gray
+                } else{
+                    button.setTitle("", for: .normal)
+                    button.backgroundColor = card.isMatched ? UIColor(red: 0, green: 0, blue: 0, alpha: 0) : UIColor.systemBlue
+                }
             }
         }
     }
     
-    private var emojiChoices = ["☠️","🦇","🎃","👻","🥶","🍭","💀","🍬","😇"]
+    var theme: String? {
+        didSet{
+            emojiChoices = theme ?? ""
+            emoji = [:]
+            updateViewFromModel()
+        }
+    }
     
-    private var emoji = [Int:String]()
+    private var emojiChoices = "☠️🦇🎃👻🥶🍭💀🍬😇"
+    
+    private var emoji = [Card:String]()
     
     private func emoji(for card: Card) -> String {
-        if emoji[card.identifier] == nil, emojiChoices.count > 0{
-            emoji[card.identifier] = emojiChoices.remove(at: emojiChoices.count.arc4random)
+        if emoji[card] == nil, emojiChoices.count > 0{
+            let randomStringIndex = emojiChoices.index(emojiChoices.startIndex, offsetBy: emojiChoices.count.arc4random)
+            emoji[card] = String(emojiChoices.remove(at: randomStringIndex))
         }
-        return emoji[card.identifier] ?? "?"
+        return emoji[card] ?? "?"
     }
 }
 
