@@ -21,7 +21,7 @@ class ConcentrationViewController: UIViewController {
         }
     }
     
-    private func updateFlipCountLabel(){
+    func updateFlipCountLabel(){
         let attributes: [NSAttributedString.Key: Any] = [
             .strokeWidth: 5.0,
             .strokeColor: UIColor.black
@@ -78,14 +78,15 @@ class ConcentrationViewController: UIViewController {
     
     private var emojiChoices = "☠️🦇🎃👻🥶🍭💀🍬😇"
     
-    private var emoji = [Card:String]()
+    private var emoji = [Int:String]()
     
     private func emoji(for card: Card) -> String {
-        if emoji[card] == nil, emojiChoices.count > 0{
+        if emoji[card.identifier] == nil, emojiChoices.count > 0{
+
             let randomStringIndex = emojiChoices.index(emojiChoices.startIndex, offsetBy: emojiChoices.count.arc4random)
-            emoji[card] = String(emojiChoices.remove(at: randomStringIndex))
+            emoji[card.identifier] = String(emojiChoices.remove(at: randomStringIndex))
         }
-        return emoji[card] ?? "?"
+        return emoji[card.identifier] ?? "?"
     }
 }
 
